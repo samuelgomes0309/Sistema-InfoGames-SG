@@ -6,7 +6,7 @@ import Login from "./pages/login";
 
 const routes: RouteObject[] = [
 	{
-		path: "/home",
+		path: "/",
 		element: <Home />,
 	},
 	{
@@ -18,7 +18,7 @@ const routes: RouteObject[] = [
 		element: <MyGames />,
 	},
 	{
-		path: "/",
+		path: "/login",
 		element: <Login />,
 	},
 ];

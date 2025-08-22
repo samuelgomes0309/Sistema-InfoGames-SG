@@ -1,7 +1,7 @@
 @import "tailwindcss";
 /* Use a @themediretiva para definir os tokens de design personalizados do seu projeto, como fontes, cores e pontos de interrupção: */
 @theme {
-	--primaryColor: rgb(0, 7, 104);
+	--primaryColor: #1a47b8;
 	--primaryLight: rgba(38, 42, 121, 0.712);
 }
 /* Use a @source diretiva para especificar explicitamente os arquivos de origem que não são detectados pela detecção automática de conteúdo do Tailwind: */
