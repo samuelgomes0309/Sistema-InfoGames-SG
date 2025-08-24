@@ -3,6 +3,7 @@ import Home from "./pages/home";
 import Explore from "./pages/explore";
 import MyGames from "./pages/games";
 import Login from "./pages/login";
+import Profile from "./pages/profile";
 
 const routes: RouteObject[] = [
 	{
@@ -20,6 +21,10 @@ const routes: RouteObject[] = [
 	{
 		path: "/login",
 		element: <Login />,
+	},
+	{
+		path: "/profile",
+		element: <Profile />,
 	},
 ];
 

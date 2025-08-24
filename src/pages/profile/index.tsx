@@ -1,10 +1,10 @@
 import SideBar from "../../components/sidebar";
 
-export default function MyGames() {
+export default function Profile() {
 	return (
 		<div className="bg-primaryColor min-h-dvh min-w-full">
 			<SideBar />
-			<h1>Pagina meus jogos</h1>
+			<h1>Pagina profile</h1>
 		</div>
 	);
 }
