@@ -71,7 +71,7 @@ export default function MyGames() {
 				</>
 			)}
 			{myGames.length === 0 && (
-				<div className="mt-5 flex items-center justify-center px-4 text-xl font-semibold text-white">
+				<div className="mt-20 flex items-center justify-center px-4 pb-32 text-xl font-semibold text-white">
 					<p>Não possui jogos favoritados</p>
 				</div>
 			)}
