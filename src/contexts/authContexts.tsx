@@ -1,7 +1,8 @@
-import { createContext, useState, type ReactNode } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import type { SigninData, SignupData } from "../pages/login";
 import {
 	createUserWithEmailAndPassword,
+	onAuthStateChanged,
 	signInWithEmailAndPassword,
 	updateProfile,
 } from "firebase/auth";
@@ -29,6 +30,17 @@ interface ProviderProps {
 export function AuthProvider({ children }: ProviderProps) {
 	const [user, setUser] = useState<UserProps | null>(null);
 	const [loadingAuth, setLoadingAuth] = useState(false);
+	useEffect(() => {
+		onAuthStateChanged(auth, (user) => {
+			if (user) {
+				setUser({
+					email: user.email ?? "",
+					uid: user.uid,
+					name: user.displayName ?? "",
+				});
+			}
+		});
+	}, []);
 	async function handleSignup(data: SignupData) {
 		if (!data) return false;
 		try {

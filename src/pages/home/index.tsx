@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import SideBar from "../../components/sidebar";
 import { api } from "../../services/api";
 import ItemCategory from "../../components/categorys";
 import GameInfo from "../../components/games";
+import { AuthContext } from "../../contexts/authContexts";
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from "../../services/firebase";
 export interface GenreProps {
 	id: number;
 	name: string;
@@ -25,12 +28,20 @@ interface PlatformProps {
 	name: string;
 	slug: string;
 }
+export interface FavoriteProps {
+	uid: string;
+	game: string;
+	game_id: number;
+}
+
 export default function Home() {
 	const [listCategory, setListCategory] = useState<GenreProps[] | []>([]);
 	const bottomRef = useRef<HTMLDivElement>(null);
 	const [page, setPage] = useState<number>(1);
 	const [games, setGames] = useState<GamesProps[] | []>([]);
-
+	const { user } = useContext(AuthContext)!;
+	const [favorites, setFavorites] = useState<FavoriteProps[] | []>([]);
+	const [favoritesLength, setFavoritesLength] = useState(0);
 	const [loadingGames, setLoadingGames] = useState(false);
 	const [loadingApp, setLoadingApp] = useState(true);
 	const allGenre = {
@@ -43,6 +54,32 @@ export default function Home() {
 	const [selectedCategory, setSelectedCategory] = useState<GenreProps | null>(
 		allGenre
 	);
+	const loadFavorites = useCallback(async () => {
+		if (!user) return;
+		try {
+			const q = query(collection(db, "myGames", user.uid, "favorites"));
+			const response = await getDocs(q);
+			if (!response.empty) {
+				const newFavorites: FavoriteProps[] = [];
+				let length = 0;
+				response.docs.forEach((doc) => {
+					newFavorites.push(doc.data() as FavoriteProps);
+					length++;
+				});
+				setFavorites(newFavorites);
+				setFavoritesLength(length);
+			} else {
+				setFavorites([]);
+			}
+		} catch (error) {
+			console.log("Erro ao carregar jogos favoritados:", error);
+		}
+	}, [user]);
+	useEffect(() => {
+		if (user) {
+			loadFavorites();
+		}
+	}, [user, loadFavorites]);
 	const loadGames = useCallback(
 		async (pageNumber: number = 1, genre_id?: number) => {
 			if (loadingGames) return;
@@ -87,7 +124,6 @@ export default function Home() {
 		sub();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
 	useEffect(() => {
 		if (!bottomRef.current) return;
 		const observer = new IntersectionObserver(
@@ -105,7 +141,6 @@ export default function Home() {
 			observer.disconnect();
 		};
 	}, [bottomRef, loadingGames, selectedCategory, loadGames, page]);
-
 	async function loadCategorys() {
 		try {
 			const response = await api.get("/genres", {
@@ -127,7 +162,6 @@ export default function Home() {
 		setPage(1);
 		await loadGames(1, genre.id);
 	}
-
 	if (loadingApp) {
 		return (
 			<div className="bg-primaryColor flex min-h-dvh min-w-full items-center justify-center">
@@ -135,7 +169,6 @@ export default function Home() {
 			</div>
 		);
 	}
-
 	return (
 		<div className="bg-primaryColor min-h-dvh min-w-full pb-12">
 			<SideBar />
@@ -162,7 +195,13 @@ export default function Home() {
 					<>
 						<main className="mt-3.5 grid grid-cols-none gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 							{games.map((game) => (
-								<GameInfo key={game.id} item={game} />
+								<GameInfo
+									key={game.id}
+									item={game}
+									length={favoritesLength}
+									isFavorite={favorites.some((f) => f.game_id === game.id)}
+									loadFav={loadFavorites}
+								/>
 							))}
 						</main>
 						<div ref={bottomRef} />
