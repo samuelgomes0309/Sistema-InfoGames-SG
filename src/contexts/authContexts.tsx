@@ -4,6 +4,7 @@ import {
 	createUserWithEmailAndPassword,
 	onAuthStateChanged,
 	signInWithEmailAndPassword,
+	signOut,
 	updateProfile,
 } from "firebase/auth";
 import { auth } from "../services/firebase";
@@ -12,6 +13,7 @@ interface AuthContextProps {
 	user: UserProps | null;
 	handleSignup: (data: SignupData) => Promise<boolean>;
 	handleSignin: (data: SigninData) => Promise<boolean>;
+	logOut: () => Promise<void>;
 	loadingAuth: boolean;
 }
 
@@ -88,9 +90,17 @@ export function AuthProvider({ children }: ProviderProps) {
 			return false;
 		}
 	}
+	async function logOut() {
+		try {
+			await signOut(auth);
+			setUser(null);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	return (
 		<AuthContext.Provider
-			value={{ handleSignin, user, handleSignup, loadingAuth }}
+			value={{ handleSignin, user, handleSignup, loadingAuth, logOut }}
 		>
 			{children}
 		</AuthContext.Provider>

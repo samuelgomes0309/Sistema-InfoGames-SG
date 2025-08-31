@@ -13,7 +13,10 @@ export default function MyGames() {
 	const { user } = useContext(AuthContext)!;
 	const [loading, setLoading] = useState(true);
 	const loadGames = useCallback(async () => {
-		if (!user?.uid) return;
+		if (!user?.uid) {
+			setLoading(false);
+			return;
+		}
 		setLoading(true);
 		try {
 			const q = query(collection(db, "myGames", user.uid, "favorites"));

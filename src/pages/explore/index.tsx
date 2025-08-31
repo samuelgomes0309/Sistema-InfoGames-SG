@@ -18,8 +18,12 @@ export default function Explore() {
 	const [favoritesLength, setFavoritesLength] = useState(0);
 	const [loadingGames, setLoadingGames] = useState(false);
 	const [name, setName] = useState("");
+	const [loadingApp, setLoadingApp] = useState(true);
 	const loadFavorites = useCallback(async () => {
-		if (!user) return;
+		if (!user) {
+			setLoadingApp(false);
+			return;
+		}
 		try {
 			const q = query(collection(db, "myGames", user.uid, "favorites"));
 			const response = await getDocs(q);
@@ -44,6 +48,9 @@ export default function Explore() {
 			loadFavorites();
 		}
 	}, [user, loadFavorites]);
+	useEffect(() => {
+		setLoadingApp(false);
+	}, [user]);
 	const loadGames = useCallback(
 		async (pageNumber: number = 1, gameName: string) => {
 			if (loadingGames) return;
@@ -90,12 +97,13 @@ export default function Explore() {
 		e.preventDefault();
 		await loadGames(1, name);
 	}
+
 	useEffect(() => {
 		if (!bottomRef.current) return;
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (loadingGames) return;
-				if (games.length > 0 && games.length < 20) return;
+				if (games.length > 0 && games.length < 20 && page === 1) return;
 				if (entries[0].isIntersecting) {
 					const nextPage = page + 1;
 					loadGames(nextPage, name);
@@ -108,6 +116,13 @@ export default function Explore() {
 			observer.disconnect();
 		};
 	}, [bottomRef, loadingGames, loadGames, page, name, games.length]);
+	if (loadingApp) {
+		return (
+			<div className="bg-primaryColor flex min-h-dvh min-w-full items-center justify-center">
+				<div className="h-20 w-20 animate-spin rounded-full border-2 border-t-green-500" />
+			</div>
+		);
+	}
 	return (
 		<div className="bg-primaryColor min-h-dvh min-w-full pb-12">
 			<SideBar />
@@ -117,7 +132,7 @@ export default function Explore() {
 					onSubmit={(e) => handleSearch(e)}
 				>
 					<input
-						className="mb-2 w-64 rounded-xs border-0 bg-zinc-950 px-2 py-3 transition-all duration-500 focus:ring-2 focus:ring-green-500 focus:outline-none disabled:cursor-not-allowed"
+						className="mb-2 w-64 rounded-md border-0 bg-zinc-950 px-2 py-3 transition-all duration-500 focus:ring-2 focus:ring-green-500 focus:outline-none disabled:cursor-not-allowed"
 						placeholder="Procure seu jogo"
 						disabled={loadingGames}
 						value={name}
@@ -125,10 +140,10 @@ export default function Explore() {
 					/>
 					<button
 						type="submit"
-						disabled={loadingGames}
-						className="flex cursor-pointer items-center justify-center transition-all duration-500 hover:scale-105 hover:text-green-500 disabled:cursor-not-allowed"
+						disabled={loadingGames || name === ""}
+						className="flex cursor-pointer items-center justify-center px-2 py-2 transition-all duration-500 hover:scale-105 hover:text-green-500 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:text-white"
 					>
-						<Search size={35} />
+						<Search size={30} />
 					</button>
 				</form>
 				{games.length > 0 && (

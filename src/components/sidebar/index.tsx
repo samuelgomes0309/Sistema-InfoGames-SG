@@ -13,7 +13,7 @@ import { AuthContext } from "../../contexts/authContexts";
 
 export default function SideBar() {
 	const location = useLocation();
-	const { user } = useContext(AuthContext)!;
+	const { user, logOut } = useContext(AuthContext)!;
 	const [miniModalVisible, setMiniModalVisible] = useState(false);
 	return (
 		<header className="flex w-full flex-col px-5 text-black sm:flex-row sm:items-center">
@@ -84,12 +84,20 @@ export default function SideBar() {
 								/>
 							)}
 							{miniModalVisible && (
-								<Link
-									className="absolute top-14 right-0 flex items-center justify-center rounded bg-blue-900 p-2 text-black shadow-md transition-all duration-500 hover:bg-gray-200"
-									to={"/profile"}
-								>
-									Minha conta
-								</Link>
+								<>
+									<Link
+										className="absolute top-14 right-0 flex items-center justify-center rounded bg-blue-900 p-2 text-black shadow-md transition-all duration-500 hover:bg-gray-200"
+										to={"/profile"}
+									>
+										Minha conta
+									</Link>
+									<button
+										onClick={() => logOut()}
+										className="absolute top-26 right-0 flex cursor-pointer items-center justify-center rounded bg-red-900 p-2 text-white shadow-md transition-all duration-500 hover:bg-red-200 hover:text-black"
+									>
+										Sair
+									</button>
+								</>
 							)}
 						</div>
 					</>
