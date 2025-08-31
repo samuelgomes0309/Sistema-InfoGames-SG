@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/authContexts";
 import { toast } from "react-toastify";
 import { db } from "../../services/firebase";
+import { useNavigate } from "react-router";
 interface Props {
 	item: GamesProps;
 	isFavorite: boolean;
@@ -15,6 +16,7 @@ interface Props {
 export default function GameInfo({ item, isFavorite, loadFav, length }: Props) {
 	const { user } = useContext(AuthContext)!;
 	const [loading, setLoading] = useState(false);
+	const nav = useNavigate();
 	async function handleDeleteOrSave() {
 		if (!user?.uid) {
 			toast.warn(
@@ -62,6 +64,9 @@ export default function GameInfo({ item, isFavorite, loadFav, length }: Props) {
 			<img
 				className="h-48 w-full rounded object-cover transition-all duration-500 hover:scale-105 hover:cursor-pointer md:h-56 lg:h-64"
 				src={item.background_image}
+				onClick={() => {
+					nav(`/game/${item.id}/${item.name}`);
+				}}
 			/>
 			<div className="my-2 flex justify-between">
 				<span className="line-clamp-1 text-2xl">{item.name}</span>

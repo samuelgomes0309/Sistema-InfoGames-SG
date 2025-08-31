@@ -2596,6 +2596,11 @@ synckit@^0.11.7:
   dependencies:
     "@pkgr/core" "^0.2.9"
 
+tailwind-scrollbar-hide@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/tailwind-scrollbar-hide/-/tailwind-scrollbar-hide-4.0.0.tgz#98ea96fe30980621665e3a3842a0aa004da9dd80"
+  integrity sha512-gobtvVcThB2Dxhy0EeYSS1RKQJ5baDFkamkhwBvzvevwX6L4XQfpZ3me9s25Ss1ecFVT5jPYJ50n+7xTBJG9WQ==
+
 tailwindcss@4.1.12, tailwindcss@^4.1.12:
   version "4.1.12"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-4.1.12.tgz#7baeed5b5ac77370571c2baa72ee06e0050fc0a8"

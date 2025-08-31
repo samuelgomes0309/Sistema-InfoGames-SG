@@ -12,6 +12,16 @@
 @utility bg-primaryLight {
 	background-color: var(--primaryLight);
 }
+/* Define o utilitário para esconder a scrollbar */
+@utility scrollbar-hide {
+	-ms-overflow-style: none; /* IE e Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+/* Adiciona o pseudo-elemento separadamente */
+.scrollbar-hide::-webkit-scrollbar {
+	display: none; /* Chrome, Safari e Edge */
+}
 /* Use a @variant diretiva para aplicar uma variante do Tailwind aos estilos no seu CSS: */
 /* Use a @custom-variant diretiva para adicionar uma variante personalizada ao seu projeto: */
 /* Use a @apply diretiva para incorporar quaisquer classes de utilitários existentes em seu próprio CSS personalizado: */

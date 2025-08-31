@@ -17,16 +17,10 @@ export interface GamesProps {
 	id: number;
 	name: string;
 	slug: string;
-	platforms: PlatformProps[];
 	rating: number;
 	rating_top: number;
 	released: string;
 	background_image: string;
-}
-interface PlatformProps {
-	id: number;
-	name: string;
-	slug: string;
 }
 export interface FavoriteProps {
 	uid: string;
