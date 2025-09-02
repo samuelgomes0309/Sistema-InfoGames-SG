@@ -65,7 +65,7 @@ export default function SideBar() {
 				{user && (
 					<>
 						<img
-							src={avatar}
+							src={user.avatarUrl ? user.avatarUrl : avatar}
 							className="h-12 w-12 rounded-full object-contain"
 						/>
 						<span className="text-md text-white">

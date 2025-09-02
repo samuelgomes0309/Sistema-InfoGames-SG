@@ -14,6 +14,7 @@ interface AuthContextProps {
 	handleSignup: (data: SignupData) => Promise<boolean>;
 	handleSignin: (data: SigninData) => Promise<boolean>;
 	logOut: () => Promise<void>;
+	setUser: React.Dispatch<React.SetStateAction<UserProps | null>>;
 	loadingAuth: boolean;
 }
 
@@ -21,6 +22,7 @@ interface UserProps {
 	uid: string;
 	name: string;
 	email: string;
+	avatarUrl: string | null;
 }
 // eslint-disable-next-line react-refresh/only-export-components
 export const AuthContext = createContext<AuthContextProps | null>(null);
@@ -39,6 +41,7 @@ export function AuthProvider({ children }: ProviderProps) {
 					email: user.email ?? "",
 					uid: user.uid,
 					name: user.displayName ?? "",
+					avatarUrl: user.photoURL,
 				});
 			}
 		});
@@ -59,6 +62,7 @@ export function AuthProvider({ children }: ProviderProps) {
 				email: data.email,
 				uid: response.user.uid,
 				name: response.user.displayName || "",
+				avatarUrl: response.user.photoURL,
 			});
 			setLoadingAuth(false);
 			return true;
@@ -81,6 +85,7 @@ export function AuthProvider({ children }: ProviderProps) {
 				email: data.email,
 				uid: response.user.uid,
 				name: response.user.displayName || "",
+				avatarUrl: response.user.photoURL,
 			});
 			setLoadingAuth(false);
 			return true;
@@ -100,7 +105,7 @@ export function AuthProvider({ children }: ProviderProps) {
 	}
 	return (
 		<AuthContext.Provider
-			value={{ handleSignin, user, handleSignup, loadingAuth, logOut }}
+			value={{ handleSignin, user, handleSignup, loadingAuth, logOut, setUser }}
 		>
 			{children}
 		</AuthContext.Provider>
